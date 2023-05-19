@@ -45,21 +45,26 @@ async function run() {
       res.send(result);
     });
 
+    // app.get("/allToysDetails", async (req, res) => {
+    //   const result = await allToysDetailsCollection.find().toArray();
+    //   res.send(result);
+    // });
+
+    app.get("/allToysDetails", async (req, res) => {
+      let query = {};
+      if (req.query?.email) {
+        query = {
+          sellerEmail: req.query.email,
+        };
+      }
+      const result = await allToysDetailsCollection.find(query).toArray();
+      res.send(result);
+    });
+
     app.post("/allToysDetails", async (req, res) => {
       const toyDetails = req.body;
       console.log(toyDetails);
       const result = await allToysDetailsCollection.insertOne(toyDetails);
-      res.send(result);
-    });
-
-    app.get("/allToysDetails", async (req, res) => {
-      const result = await allToysDetailsCollection.find().toArray();
-      res.send(result);
-    });
-
-    app.get("/allToysDetails", async (req, res) => {
-      console.log(req.query);
-      const result = await allToysDetailsCollection.find().toArray();
       res.send(result);
     });
 
