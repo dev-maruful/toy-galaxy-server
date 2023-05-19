@@ -33,6 +33,23 @@ async function run() {
       .db("toyGalaxyDB")
       .collection("allToysDetails");
 
+    const indexKeys = { name: 1 };
+    const indexOptions = { name: "name" };
+    const result = await allToysDetailsCollection.createIndex(
+      indexKeys,
+      indexOptions
+    );
+
+    app.get("/toySearchByName/:text", async (req, res) => {
+      const searchText = req.params.text;
+      const result = await allToysDetailsCollection
+        .find({
+          $or: [{ name: { $regex: searchText, $options: "i" } }],
+        })
+        .toArray();
+      res.send(result);
+    });
+
     app.get("/toyGalaxyCategory", async (req, res) => {
       const result = await shopByCategoryCollection.find().toArray();
       res.send(result);
