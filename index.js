@@ -29,6 +29,10 @@ async function run() {
       .db("toyGalaxyDB")
       .collection("toyGalaxyCategory");
 
+    const allToysDetailsCollection = client
+      .db("toyGalaxyDB")
+      .collection("allToysDetails");
+
     app.get("/toyGalaxyCategory", async (req, res) => {
       const result = await shopByCategoryCollection.find().toArray();
       res.send(result);
@@ -38,6 +42,13 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await shopByCategoryCollection.findOne(query);
+      res.send(result);
+    });
+
+    app.post("/allToysDetails", async (req, res) => {
+      const toyDetails = req.body;
+      console.log(toyDetails);
+      const result = await allToysDetailsCollection.insertOne(toyDetails);
       res.send(result);
     });
 
