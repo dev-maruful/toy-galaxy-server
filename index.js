@@ -71,6 +71,7 @@ async function run() {
       }
       const result = await allToysDetailsCollection
         .find(query)
+        .sort({ price: 1 })
         .limit(20)
         .toArray();
       res.json(result);
