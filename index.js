@@ -71,7 +71,6 @@ async function run() {
       }
       const result = await allToysDetailsCollection
         .find(query)
-        .sort({ price: 1 })
         .limit(20)
         .toArray();
       res.json(result);
@@ -82,6 +81,26 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const result = await allToysDetailsCollection.findOne(query);
       res.json(result);
+    });
+
+    app.get("/ascending", async (req, res) => {
+      const email = req.query.email;
+      const filter = { sellerEmail: email };
+      const result = await allToysDetailsCollection
+        .find(filter)
+        .sort({ price: 1 })
+        .toArray();
+      res.send(result);
+    });
+
+    app.get("/descending", async (req, res) => {
+      const email = req.query.email;
+      const filter = { sellerEmail: email };
+      const result = await allToysDetailsCollection
+        .find(filter)
+        .sort({ price: -1 })
+        .toArray();
+      res.send(result);
     });
 
     app.post("/allToysDetails", async (req, res) => {
