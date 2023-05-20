@@ -69,7 +69,10 @@ async function run() {
           sellerEmail: req.query.email,
         };
       }
-      const result = await allToysDetailsCollection.find(query).toArray();
+      const result = await allToysDetailsCollection
+        .find(query)
+        .limit(20)
+        .toArray();
       res.send(result);
     });
 
