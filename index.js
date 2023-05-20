@@ -23,7 +23,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const shopByCategoryCollection = client
       .db("toyGalaxyDB")
@@ -33,12 +33,12 @@ async function run() {
       .db("toyGalaxyDB")
       .collection("allToysDetails");
 
-    const indexKeys = { name: 1 };
-    const indexOptions = { name: "name" };
-    const result = await allToysDetailsCollection.createIndex(
-      indexKeys,
-      indexOptions
-    );
+    // const indexKeys = { name: 1 };
+    // const indexOptions = { name: "name" };
+    // const result = await allToysDetailsCollection.createIndex(
+    //   indexKeys,
+    //   indexOptions
+    // );
 
     app.get("/toySearchByName/:text", async (req, res) => {
       const searchText = req.params.text;
@@ -47,19 +47,19 @@ async function run() {
           $or: [{ name: { $regex: searchText, $options: "i" } }],
         })
         .toArray();
-      res.send(result);
+      res.json(result);
     });
 
     app.get("/toyGalaxyCategory", async (req, res) => {
       const result = await shopByCategoryCollection.find().toArray();
-      res.send(result);
+      res.json(result);
     });
 
     app.get("/toyGalaxyCategory/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await shopByCategoryCollection.findOne(query);
-      res.send(result);
+      res.json(result);
     });
 
     app.get("/allToysDetails", async (req, res) => {
@@ -73,21 +73,21 @@ async function run() {
         .find(query)
         .limit(20)
         .toArray();
-      res.send(result);
+      res.json(result);
     });
 
     app.get("/allToysDetails/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await allToysDetailsCollection.findOne(query);
-      res.send(result);
+      res.json(result);
     });
 
     app.post("/allToysDetails", async (req, res) => {
       const toyDetails = req.body;
       console.log(toyDetails);
       const result = await allToysDetailsCollection.insertOne(toyDetails);
-      res.send(result);
+      res.json(result);
     });
 
     app.put("/updateToy/:id", async (req, res) => {
@@ -102,21 +102,21 @@ async function run() {
         },
       };
       const result = await allToysDetailsCollection.updateOne(filter, toy);
-      res.send(result);
+      res.json(result);
     });
 
     app.delete("/allToysDetails/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await allToysDetailsCollection.deleteOne(query);
-      res.send(result);
+      res.json(result);
     });
 
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
+    // await client.db("admin").command({ ping: 1 });
+    // console.log(
+    //   "Pinged your deployment. You successfully connected to MongoDB!"
+    // );
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
